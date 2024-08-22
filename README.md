@@ -33,6 +33,7 @@ gdalwarp -dstnodata 0 input.tif output.tif
 gdal_translate -of COG input.tif output_cog.tif
 ```
 
+**This all preprocessing step is included in `./pre.sh` bash script**
 
 ## Environment Variables
 

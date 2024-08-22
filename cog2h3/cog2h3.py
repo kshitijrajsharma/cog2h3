@@ -189,15 +189,13 @@ async def process_raster(cog_url: str, table_name: str, h3_res: int, sample_by: 
 
         transform = src.transform
         bands_data = []
-        native_h3_res = None
 
         for band in range(1, band_count + 1):
             grayscale = src.read(band)
             min_value = np.min(grayscale)
             max_value = np.max(grayscale)
-            if not native_h3_res:
-                native_h3_res = nearest_h3_resolution(grayscale.shape, src.transform, search_mode="smaller_than_pixel")
-                logging.info(f"Determined Min fitting H3 resolution for band {band}: {native_h3_res}")
+            native_h3_res = nearest_h3_resolution(grayscale.shape, src.transform, search_mode="smaller_than_pixel")
+            logging.info(f"Determined Min fitting H3 resolution for band {band}: {native_h3_res}")
 
             if h3_res > native_h3_res:
                 logging.warn(
@@ -234,7 +232,7 @@ async def process_raster(cog_url: str, table_name: str, h3_res: int, sample_by: 
                 nodata_value=0,
                 compact=False,
             )
-            logging.info(f"Calculation of h3 indexes on {native_h3_res} is Done for band {band}")
+            logging.info(f"Calculation done for res:{native_h3_res} band:{band}")
             grayscale_h3_df_pandas = grayscale_h3_df.to_pandas()
             grayscale_h3_df_pandas = grayscale_h3_df_pandas.rename(columns={"value": f"band{band}"})
             bands_data.append(grayscale_h3_df_pandas)

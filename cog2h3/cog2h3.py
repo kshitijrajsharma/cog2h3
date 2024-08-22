@@ -18,6 +18,7 @@ import asyncio
 import logging
 import os
 import time
+from urllib.parse import urlparse
 
 import aiohttp
 import asyncpg
@@ -27,9 +28,9 @@ import pandas as pd
 import rasterio
 from h3ronpy.arrow.raster import nearest_h3_resolution, raster_to_dataframe
 from rasterio.enums import Resampling
-from rasterio.windows import get_data_window
-from rasterio.windows import transform as trfs
 from sklearn.preprocessing import MinMaxScaler
+
+from .__version__ import __version__
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
@@ -51,36 +52,45 @@ resampling_methods = [
     "sum",
     "rms",
 ]
-## setup static dir for cog
+## setup static dir for cog downloads if required
 STATIC_DIR = os.getenv("STATIC_DIR", "static")
-os.makedirs(STATIC_DIR, exist_ok=True)
 
 
-async def download_cog(cog_url: str) -> str:
-    """Downloads COG to file dir if not exists
+async def download_cog(cog_url_or_path: str) -> str:
+    """Checks if the supplied string is a file path or URL.
+    Downloads the COG to static dir if needed.
 
     Args:
-        cog_url (str): where to download cog from ?
+        cog_url_or_path (str): URL or local file path to check/download.
 
     Raises:
-        Exception: _description_
+        Exception: Raised if download fails.
 
     Returns:
-        str: file path of downloaded url
+        str: File path of the COG.
     """
-    cog_file_name = os.path.basename(cog_url)
+    if os.path.isfile(cog_url_or_path):
+        logging.info(f"COG file already exists at {cog_url_or_path}")
+        return cog_url_or_path
+
+    parsed_url = urlparse(cog_url_or_path)
+    if not parsed_url.scheme or not parsed_url.netloc:
+        raise Exception(f"Invalid URL or file path: {cog_url_or_path}")
+
+    cog_file_name = os.path.basename(parsed_url.path)
+    os.makedirs(STATIC_DIR, exist_ok=True)
     file_path = os.path.join(STATIC_DIR, cog_file_name)
 
     if os.path.exists(file_path):
-        logging.info(f"COG file already exists: {file_path}")
+        logging.info(f"COG file already exists in static dir: {file_path}")
         return file_path
 
-    logging.info(f"Downloading COG from {cog_url}")
+    logging.info(f"Downloading COG from {cog_url_or_path}")
     async with aiohttp.ClientSession() as session:
-        async with session.get(cog_url) as response:
+        async with session.get(cog_url_or_path) as response:
             if response.status != 200:
-                logging.error(f"Failed to download COG from {cog_url}")
-                raise Exception(f"Failed to download COG from {cog_url}")
+                logging.error(f"Failed to download COG from {cog_url_or_path}")
+                raise Exception(f"Failed to download COG from {cog_url_or_path}")
             with open(file_path, "wb") as tmp_file:
                 tmp_file.write(await response.read())
                 logging.info(f"Downloaded COG to {file_path}")
@@ -272,6 +282,7 @@ def main():
         choices=resampling_methods,
         help="Raster Resampling Method",
     )
+    parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
 
     args = parser.parse_args()
 

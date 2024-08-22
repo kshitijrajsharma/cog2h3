@@ -1,6 +1,6 @@
 [project]
 name = "cog2h3"
-version = "0.0.1"
+version = "0.0.2"
 dynamic = ["version"]
 description = "Command line script to convert Cloud Optimized Geotiff to h3 cells and insert to PosgreSQL"
 readme = "README.md"

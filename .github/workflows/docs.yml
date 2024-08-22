@@ -1,0 +1,19 @@
+name: MkDocs Build
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Build with MkDocs
+      uses: romw314/mkdocs-action@v2
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v1.0.9
+  deploy:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Configure Pages
+      uses: actions/configure-pages@v4.0.0
+    - name: Deploy to Pages
+      uses: actions/deploy-pages@v3.0.1

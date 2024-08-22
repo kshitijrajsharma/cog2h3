@@ -20,3 +20,23 @@ pip install -e .
 ```
 
 - Start Developing ! 
+
+
+## Versioning 
+
+- Bump 
+```shell
+cz bump
+```
+
+- Push
+```shell
+git push
+```
+
+- Push tags
+```shell
+git push --tags
+```
+
+- Make Release

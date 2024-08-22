@@ -19,7 +19,6 @@ This script processes Cloud Optimized GeoTIFFs (COGs) and converts them to H3 he
 
 - Ensure your input COG is in WGS 1984 projection. If not, reproject it using gdalwarp
 
-Example : 
 ```shell
 gdalwarp -overwrite input.tif output.tif -s_srs EPSG:32645 -t_srs EPSG:4326
 ```

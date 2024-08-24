@@ -77,7 +77,8 @@ python cog2h3.py --cog my-cog.tif --table cog_h3 --res 8
 
 Contributions are Welcome ! स्वागतम
 
-## Tutorials 
+## Examples :  
 
 Single Band Raster Processing : https://github.com/kshitijrajsharma/raster-analysis-using-h3
-Multi Band Raster Processing : 
+
+Multi Band Raster Processing : https://github.com/kshitijrajsharma/raster-analysis-using-h3/blob/master/Multiband-Analysis.md

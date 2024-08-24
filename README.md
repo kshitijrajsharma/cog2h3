@@ -16,6 +16,7 @@ This script processes Cloud Optimized GeoTIFFs (COGs) and converts them to H3 he
 
 - Python 3.7+
 - PostgreSQL database
+- PostgreSQL extensions : Postgis, h3
 
 - Ensure your input COG is in WGS 1984 projection. If not, reproject it using gdalwarp
 

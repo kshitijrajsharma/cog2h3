@@ -1,4 +1,4 @@
-#Cloud Optimized Geotiff to H3 Cell
+# Cloud Optimized Geotiff to H3 Cell
 
 This script processes Cloud Optimized GeoTIFFs (COGs) and converts them to H3 hexagonal grids, storing the results in a PostgreSQL database. It supports multi-band rasters, resampling, and various processing options.
 

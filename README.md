@@ -24,12 +24,14 @@ This script processes Cloud Optimized GeoTIFFs (COGs) and converts them to H3 he
 gdalwarp -overwrite input.tif output.tif -s_srs EPSG:32645 -t_srs EPSG:4326
 ```
 
-- Set nodata values to 0 using `gdalwarp`, 
+- Set nodata values to 0 using `gdalwarp`,
+
 ```shell
 gdalwarp -dstnodata 0 input.tif output.tif
 ```
 
 - Convert a GeoTIFF to COG format:
+
 ```shell
 gdal_translate -of COG input.tif output_cog.tif
 ```
@@ -44,22 +46,26 @@ Set the following environment variables or use default values:
 - `STATIC_DIR`: Directory to store downloaded COGs (default: "static")
 
 Example:
+
 ```shell
 export DATABASE_URL="postgresql://user:password@host:port/database"
 export STATIC_DIR="/path/to/cog/storage"
 ```
+
 ## Usage
 
 Run the script with the following command:
+
 ```shell
 python cog2h3.py --cog <COG_URL> --table <TABLE_NAME> [OPTIONS]
 ```
-### Required Arguments:
+
+### Required Arguments
 
 - `--cog`: URL of the Cloud Optimized GeoTIFF (must be in WGS84 projection)
 - `--table`: Name of the database table to store results
 
-### Optional Arguments:
+### Optional Arguments
 
 - `--res`: H3 resolution level (default: 8)
 - `--preserve_range`: Preserve the value range of the raster while resampling
@@ -68,17 +74,18 @@ python cog2h3.py --cog <COG_URL> --table <TABLE_NAME> [OPTIONS]
 
 Available resampling methods: nearest, bilinear, cubic, cubic_spline, lanczos, average, mode, gauss, max, min, med, q1, q3, sum, rms
 
-### Example:
+### Example
+
 ```shell
 python cog2h3.py --cog my-cog.tif --table cog_h3 --res 8
 ```
 
-## Contribute 
+## Contribute
 
 Contributions are Welcome ! स्वागतम
 
-## Examples :  
+## Examples
 
-Single Band Raster Processing : https://github.com/kshitijrajsharma/raster-analysis-using-h3
+Single Band Raster Processing : <https://github.com/kshitijrajsharma/raster-analysis-using-h3>
 
-Multi Band Raster Processing : https://github.com/kshitijrajsharma/raster-analysis-using-h3/blob/master/Multiband-Analysis.md
+Multi Band Raster Processing : <https://github.com/kshitijrajsharma/raster-analysis-using-h3/blob/master/Multiband-Analysis.md>

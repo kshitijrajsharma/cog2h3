@@ -107,12 +107,12 @@ async def create_or_replace_table_pandas(df: pd.DataFrame, table_name: str, db_u
     create_table_query = f"""
     CREATE TABLE {table_name} (
         h3_ix h3index PRIMARY KEY,
-        {', '.join([f"{col} FLOAT" for col in columns if col != 'h3_ix'])}
+        {", ".join([f"{col} FLOAT" for col in columns if col != "h3_ix"])}
     )
     """
 
     insert_columns = ", ".join(columns)
-    insert_placeholders = ", ".join([f"${i+1}" for i in range(len(columns))])
+    insert_placeholders = ", ".join([f"${i + 1}" for i in range(len(columns))])
     insert_query = f"INSERT INTO {table_name} ({insert_columns}) VALUES ({insert_placeholders})"
 
     await conn.execute(f"DROP TABLE IF EXISTS {table_name}")
@@ -143,7 +143,6 @@ def convert_h3_indices_pandas(df: pd.DataFrame) -> pd.DataFrame:
 
 def get_edge_length(res, unit="km"):
     """Gets edge length of constant h3 cells using resolution"""
-
     edge_lengths_km = [
         1281.256011,
         483.0568391,
@@ -204,7 +203,7 @@ async def process_raster(cog_url: str, table_name: str, h3_res: int, sample_by: 
                 h3_res = native_h3_res
 
             if h3_res < native_h3_res:
-                logging.info(f"Resampling original raster to: {get_edge_length(h3_res-1, unit='m')}m")
+                logging.info(f"Resampling original raster to: {get_edge_length(h3_res - 1, unit='m')}m")
                 scale_factor = src.res[0] / (get_edge_length(h3_res - 1, unit="m") / 111320)
                 data = src.read(
                     band,
@@ -247,7 +246,7 @@ async def process_raster(cog_url: str, table_name: str, h3_res: int, sample_by: 
 
         result_h3_merged_df = convert_h3_indices_pandas(result_df)
 
-        logging.info(f"Overall raster calculation done in {int(time.time()-raster_time)} seconds")
+        logging.info(f"Overall raster calculation done in {int(time.time() - raster_time)} seconds")
 
         await create_or_replace_table_pandas(result_h3_merged_df, table_name, DATABASE_URL)
 
